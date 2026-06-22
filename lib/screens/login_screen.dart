@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:haajir/bloc/auth_bloc.dart';
 import 'package:haajir/main.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -23,14 +25,28 @@ class LoginScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: .center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.fingerprint, size: 125, color: Colors.blue),
-          SizedBox(width: MediaQuery.of(context).size.width, height: 30),
-          ElevatedButton(onPressed: () {}, child: Text("Sign in with Google")),
-        ],
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthFailure) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.error)));
+          }
+        },
+        child: Column(
+          crossAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.fingerprint, size: 125, color: Colors.blue),
+            SizedBox(width: MediaQuery.of(context).size.width, height: 30),
+            ElevatedButton(
+              onPressed: () {
+                context.read<AuthBloc>().add(SignInWithGooglePressed());
+              },
+              child: Text("Sign in with Google"),
+            ),
+          ],
+        ),
       ),
     );
   }
