@@ -56,11 +56,11 @@ class AttendanceCubit extends Cubit<AttendanceState> {
     try {
       // These are temporary values for the Firestore lesson.
       await _repository.logToday(livenessPassed: true, photoMatchedScore: 97);
-      _isSaving = false;
       emit(AttendanceLoaded(_records));
     } catch (error) {
-      _isSaving = false;
       emit(AttendanceError(error.toString(), previousRecords: _records));
+    } finally {
+      _isSaving = false;
     }
   }
 

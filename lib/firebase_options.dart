@@ -62,8 +62,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '465320960739',
     projectId: 'haajir-5675',
     storageBucket: 'haajir-5675.firebasestorage.app',
-    androidClientId: '465320960739-jvmvmrbk2udoj0akvblcsj5kipd2tb1m.apps.googleusercontent.com',
-    iosClientId: '465320960739-3arut9pi053re3kohdrh2qkc40v0gbc2.apps.googleusercontent.com',
+    androidClientId:
+        '465320960739-jvmvmrbk2udoj0akvblcsj5kipd2tb1m.apps.googleusercontent.com',
+    iosClientId:
+        '465320960739-3arut9pi053re3kohdrh2qkc40v0gbc2.apps.googleusercontent.com',
     iosBundleId: 'com.example.haajir',
   );
   static const FirebaseOptions macos = FirebaseOptions(
@@ -72,8 +74,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '465320960739',
     projectId: 'haajir-5675',
     storageBucket: 'haajir-5675.firebasestorage.app',
-    androidClientId: '465320960739-jvmvmrbk2udoj0akvblcsj5kipd2tb1m.apps.googleusercontent.com',
-    iosClientId: '465320960739-3arut9pi053re3kohdrh2qkc40v0gbc2.apps.googleusercontent.com',
+    androidClientId:
+        '465320960739-jvmvmrbk2udoj0akvblcsj5kipd2tb1m.apps.googleusercontent.com',
+    iosClientId:
+        '465320960739-3arut9pi053re3kohdrh2qkc40v0gbc2.apps.googleusercontent.com',
     iosBundleId: 'com.example.haajir',
   );
 
