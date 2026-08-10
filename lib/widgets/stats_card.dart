@@ -3,7 +3,7 @@ import 'package:haajir/models/attendance_record.dart';
 import 'package:haajir/widgets/container_dot.dart';
 
 class StatsCard extends StatelessWidget {
-  const StatsCard({super.key, required this.records});
+  const StatsCard({required this.records, super.key});
 
   final List<AttendanceRecord> records;
 
@@ -11,18 +11,13 @@ class StatsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    final presentDays = records.where((r) => r.status).length;
-    final totalDays = records.length;
-    final percentage = totalDays > 0 ? ((presentDays / totalDays) * 100).round() : 0;
-    final currentYear = DateTime.now().year;
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: colorScheme.secondaryContainer,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colorScheme.secondary.withValues(alpha: 0.1)),
+        border: Border.all(color: colorScheme.secondary.withOpacity(0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,7 +28,7 @@ class StatsCard extends StatelessWidget {
               fontSize: 12,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.6,
-              color: colorScheme.onSecondaryContainer.withValues(alpha: 0.8),
+              color: colorScheme.onSecondaryContainer.withOpacity(0.8),
             ),
           ),
           const SizedBox(height: 4),
@@ -42,7 +37,7 @@ class StatsCard extends StatelessWidget {
             textBaseline: TextBaseline.alphabetic,
             children: [
               Text(
-                '$presentDays',
+                '142',
                 style: TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.bold,
@@ -52,11 +47,11 @@ class StatsCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                'days in $currentYear',
+                'days in 2023',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
-                  color: colorScheme.onSecondaryContainer.withValues(alpha: 0.7),
+                  color: colorScheme.onSecondaryContainer.withOpacity(0.7),
                 ),
               ),
             ],
@@ -65,12 +60,12 @@ class StatsCard extends StatelessWidget {
           Row(
             children: [
               Row(
-                children: [
-                  const ContainerDot(color: Color(0xFF2E7D32)),
-                  const SizedBox(width: 6),
+                children: const [
+                  ContainerDot(color: Color(0xFF2E7D32)),
+                  SizedBox(width: 6),
                   Text(
-                    '$percentage% Attendance',
-                    style: const TextStyle(
+                    '94% Attendance',
+                    style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                       color: Colors.white,

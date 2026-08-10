@@ -76,11 +76,11 @@ class AuthScreenRouter extends StatelessWidget {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is Authenticated) {
-          return BlocProvider<AttendanceCubit>(
-            create: (context) => AttendanceCubit(
-              repository: AttendanceRepository(),
-            )..loadAttendance(),
-            child: const AttendanceHistoryScreen(),
+          return BlocProvider(
+            create: (context) =>
+                AttendanceCubit(repository: AttendanceRepository())
+                  ..loadAttendance(),
+            child: AttendanceHistoryScreen(),
           );
         } else if (state is AuthLoading) {
           return const Center(child: CircularProgressIndicator());

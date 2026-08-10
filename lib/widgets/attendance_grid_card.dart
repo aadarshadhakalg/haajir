@@ -3,7 +3,7 @@ import 'package:haajir/models/attendance_record.dart';
 import 'package:haajir/widgets/legend_item.dart';
 
 class AttendanceGridCard extends StatelessWidget {
-  const AttendanceGridCard({super.key, required this.records});
+  const AttendanceGridCard({required this.records, super.key});
 
   final List<AttendanceRecord> records;
 
@@ -11,36 +11,54 @@ class AttendanceGridCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-
-    // Map records by date key ('YYYY-MM-DD')
-    final recordMap = <String, AttendanceRecord>{};
-    for (final record in records) {
-      final key =
-          '${record.date.year}-${record.date.month.toString().padLeft(2, '0')}-${record.date.day.toString().padLeft(2, '0')}';
-      recordMap[key] = record;
-    }
-
-    // Grid Status Array mapping to colors:
+    // Grid Status Array mapping to HTML colors:
     // 1: Present (#2E7D32)
     // 0: Off (surfaceContainer)
-    // 2: Leave/Absent (surfaceContainerHighest)
-    final List<int> gridData = List.generate(35, (index) {
-      final day = today.subtract(Duration(days: 34 - index));
-      final key =
-          '${day.year}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}';
-      final record = recordMap[key];
-      if (record == null) return 0;
-      return record.status ? 1 : 2;
-    });
+    // 2: Leave (surfaceContainerHighest / surface-variant)
+    final List<int> gridData = [
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      2,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+    ];
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.3)),
+        border: Border.all(color: colorScheme.outlineVariant.withOpacity(0.3)),
       ),
       child: Column(
         children: [
@@ -107,7 +125,7 @@ class AttendanceGridCard extends StatelessWidget {
           // Legend
           Divider(
             height: 1,
-            color: colorScheme.outlineVariant.withValues(alpha: 0.2),
+            color: colorScheme.outlineVariant.withOpacity(0.2),
           ),
           const SizedBox(height: 16),
           Row(

@@ -15,7 +15,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: colorScheme.surface.withValues(alpha: 0.85),
+        backgroundColor: colorScheme.surface.withOpacity(0.85),
         elevation: 0,
         scrolledUnderElevation: 0,
         titleSpacing: 20,
@@ -23,7 +23,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
           preferredSize: const Size.fromHeight(1.0),
           child: Divider(
             height: 1,
-            color: colorScheme.outlineVariant.withValues(alpha: 0.2),
+            color: colorScheme.outlineVariant.withOpacity(0.2),
           ),
         ),
         title: Row(
@@ -54,24 +54,26 @@ class AttendanceHistoryScreen extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
-                backgroundColor: colorScheme.error,
+                backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.floating,
+                margin: EdgeInsets.all(10),
               ),
             );
           }
         },
         builder: (context, state) {
           if (state is AttendanceLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           }
 
-          List<AttendanceRecord> records = [];
-          bool isSaving = false;
+          List<AttendanceRecord> _records = [];
 
           if (state is AttendanceLoaded) {
-            records = state.records;
-            isSaving = state.isSaving;
-          } else if (state is AttendanceError) {
-            records = state.previousRecords;
+            _records = state.records;
+          }
+
+          if (state is AttendanceError) {
+            _records = state.previousRecords;
           }
 
           return RefreshIndicator(
@@ -85,7 +87,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Stats Card
-                  StatsCard(records: records),
+                  StatsCard(records: _records),
                   const SizedBox(height: 16),
 
                   // Activity Header
@@ -104,7 +106,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '${DateTime.now().year}',
+                            DateTime.now().year.toString(),
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -118,7 +120,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
                   const SizedBox(height: 12),
 
                   // Contribution Grid Card
-                  AttendanceGridCard(records: records),
+                  AttendanceGridCard(records: _records),
                   const SizedBox(height: 16),
 
                   // Actions Section
@@ -128,7 +130,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0.6,
-                      color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                      color: colorScheme.onSurfaceVariant.withOpacity(0.7),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -138,24 +140,13 @@ class AttendanceHistoryScreen extends StatelessWidget {
                     width: double.infinity,
                     height: 52,
                     child: ElevatedButton.icon(
-                      onPressed: isSaving
-                          ? null
-                          : () {
-                              context.read<AttendanceCubit>().logAttendance();
-                            },
-                      icon: isSaving
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Icon(Icons.check_circle, color: Colors.white),
-                      label: Text(
-                        isSaving ? 'Saving...' : 'Log Attendance Today',
-                        style: const TextStyle(
+                      onPressed: () {
+                        context.read<AttendanceCubit>().logAttendance();
+                      },
+                      icon: const Icon(Icons.check_circle, color: Colors.white),
+                      label: const Text(
+                        'Log Attendance Today',
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,

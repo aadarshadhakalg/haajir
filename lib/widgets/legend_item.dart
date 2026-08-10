@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class LegendItem extends StatelessWidget {
   final Color color;
   final String label;
