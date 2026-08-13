@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:haajir/models/attendance_record.dart';
 import 'package:haajir/repositories/attendance_repository.dart';
@@ -57,6 +58,17 @@ class AttendanceCubit extends Cubit<AttendanceState> {
       // These are temporary values for the Firestore lesson.
       await _repository.logToday(livenessPassed: true, photoMatchedScore: 97);
       emit(AttendanceLoaded(_records));
+    } on FirebaseException catch (error) {
+      if (error.code == 'permission-denied') {
+        emit(
+          AttendanceError(
+            'Attendance Already Logged For Today',
+            previousRecords: _records,
+          ),
+        );
+      } else {
+        emit(AttendanceError(error.toString(), previousRecords: _records));
+      }
     } catch (error) {
       emit(AttendanceError(error.toString(), previousRecords: _records));
     } finally {

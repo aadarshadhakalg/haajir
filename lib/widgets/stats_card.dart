@@ -11,6 +11,26 @@ class StatsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
+    final currentDate = DateTime.now();
+    final totalDaysPresent = records
+        .where((record) => record.date.year == currentDate.year)
+        .length;
+
+    final percentageAttendance = (totalDaysPresent / 365) * 100;
+
+    final totalDaysPresentLastMonth = records
+        .where((record) => record.date.month == currentDate.month - 1)
+        .length;
+
+    final totalDaysPresentThisMonth = records
+        .where((record) => record.date.month == currentDate.month)
+        .length;
+
+    final difference = totalDaysPresentThisMonth - totalDaysPresentLastMonth;
+    final percentageChange = totalDaysPresentLastMonth == 0
+        ? 100
+        : (difference / (totalDaysPresentLastMonth)) * 100;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -37,7 +57,7 @@ class StatsCard extends StatelessWidget {
             textBaseline: TextBaseline.alphabetic,
             children: [
               Text(
-                '142',
+                totalDaysPresent.toString(),
                 style: TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.bold,
@@ -47,7 +67,7 @@ class StatsCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                'days in 2023',
+                'days in ${currentDate.year}',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
@@ -60,11 +80,11 @@ class StatsCard extends StatelessWidget {
           Row(
             children: [
               Row(
-                children: const [
+                children: [
                   ContainerDot(color: Color(0xFF2E7D32)),
                   SizedBox(width: 6),
                   Text(
-                    '94% Attendance',
+                    '${percentageAttendance.ceil()}% Attendance',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
@@ -75,11 +95,11 @@ class StatsCard extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               Row(
-                children: const [
+                children: [
                   Icon(Icons.trending_up, size: 16, color: Colors.white),
                   SizedBox(width: 4),
                   Text(
-                    '+2% vs last month',
+                    '${(difference.sign == -1) ? '-' : '+'}${percentageChange.ceil()}% vs last month',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,

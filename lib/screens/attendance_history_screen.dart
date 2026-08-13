@@ -106,7 +106,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            DateTime.now().year.toString(),
+                            '${DateTime.now().month}/${DateTime.now().year}',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,

@@ -11,47 +11,41 @@ class AttendanceGridCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    // Grid Status Array mapping to HTML colors:
-    // 1: Present (#2E7D32)
-    // 0: Off (surfaceContainer)
-    // 2: Leave (surfaceContainerHighest / surface-variant)
-    final List<int> gridData = [
-      1,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      1,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      1,
-      1,
-      2,
-      1,
-      1,
-      0,
-      0,
-      1,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ];
+    final DateTime currentDate = DateTime.now();
+    final int lengthofMonth = DateUtils.getDaysInMonth(
+      currentDate.year,
+      currentDate.month,
+    );
+
+    List<DateTime> daysinCurrentMonth = List.generate(
+      lengthofMonth,
+      (index) => DateTime(
+        currentDate.year,
+        currentDate.month,
+        1,
+      ).add(Duration(days: index)),
+    );
+
+    final Map attendanceByDay = Map.fromEntries(
+      records.map((record) {
+        return MapEntry(record.date, record.status);
+      }),
+    );
+
+    final int weekOffsetForCurrentMonth = DateUtils.firstDayOffset(
+      currentDate.year,
+      currentDate.month,
+      DefaultMaterialLocalizations(),
+    );
+
+    final List<int> dynamicGridData = daysinCurrentMonth.map((day) {
+      final statusOfCurrentDay = attendanceByDay[day];
+      if (statusOfCurrentDay != null) {
+        return statusOfCurrentDay ? 1 : 0;
+      } else {
+        return 0;
+      }
+    }).toList()..insertAll(0, List.filled(weekOffsetForCurrentMonth - 1, 0));
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -88,7 +82,7 @@ class AttendanceGridCard extends StatelessWidget {
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: gridData.length,
+            itemCount: dynamicGridData.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 7,
               crossAxisSpacing: 6,
@@ -96,7 +90,7 @@ class AttendanceGridCard extends StatelessWidget {
               childAspectRatio: 1.0,
             ),
             itemBuilder: (context, index) {
-              final status = gridData[index];
+              final status = dynamicGridData[index];
               Color boxColor;
 
               switch (status) {
